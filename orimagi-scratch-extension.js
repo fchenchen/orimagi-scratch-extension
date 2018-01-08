@@ -84,5 +84,5 @@
   };
 
   // Register the extension
-  ScratchExtensions.register('Local Test Extension', descriptor, ext);
+  ScratchExtensions.register('Orimagi Extension', descriptor, ext);
 })({});
