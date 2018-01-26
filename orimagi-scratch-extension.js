@@ -3,7 +3,6 @@
 
 (function(ext) {
   var status = false;
-  var port = "3000"; // Default port number
 
   function GetURLParameter(sParam){
     var sPageURL = window.location.search.substring(1);
@@ -17,8 +16,14 @@
     }
   };
 
-  port = GetURLParameter("port");
-  var server_url = "http://localhost:"+port
+  var port = GetURLParameter("port");
+  if(port){
+    var server_url = "http://localhost:"+port;
+  }
+  else{
+    alert("Invalid extension URL, please refresh and try again");
+    return; // Does not load the blocks
+  }
 
   var motorPos = {
     a: 127,
@@ -131,6 +136,7 @@
       [' ', 'Reset all motors', 'resetMotors'],
       [' ', 'Set LED at %m.conList to %n', 'setLED', 'a', 0],
       ['R', 'Sensor reading at %m.conList', 'readSensor', 'a'],
+      [' ', 'Connected to OriBoard%n', '', ''],
     ],
     menus: {
       conList:['a','b','c','d'],
