@@ -3,12 +3,30 @@
 
 (function(ext) {
   var status = false;
+  var port = "3000"; // Default port number
+
+  function GetURLParameter(sParam){
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    //console.log(sURLVariables);
+    for (var i = 0; i < sURLVariables.length; i++){
+      var sParameterName = sURLVariables[i].split('=');
+      if (sParameterName[0] == sParam){
+        return sParameterName[1];
+      }
+    }
+  };
+
+  port = GetURLParameter("port");
+  var server_url = "http://localhost:"+port
+
   var motorPos = {
     a: 127,
     b: 127,
     c: 127,
     d: 127,
   }
+
   // Cleanup function when the extension is unloaded
   ext._shutdown = function() {};
 
@@ -17,7 +35,7 @@
   ext._getStatus = function() {
 
     // Request status
-    $.post("http://localhost:3000",
+    $.post(server_url,
            {type: 'STATUS'},
            function(data, status, xhr) {
              processData(data);
@@ -41,7 +59,7 @@
   ext.setServo = function(con,pos) {
     motorPos[con] = pos; // Record value
     // console.log(motorPos[con]);
-    $.post("http://localhost:3000",
+    $.post(server_url,
            {
              type: 'SERVO',
              servo: con,
@@ -81,7 +99,7 @@
   };
 
   ext.setLED = function(con,brightness) {
-    $.post("http://localhost:3000",
+    $.post(server_url,
            {
              type: 'LED',
              led: con,
@@ -94,7 +112,7 @@
   };
 
   ext.readSensor = function(con,callback) {
-    $.post("http://localhost:3000",
+    $.post(server_url,
            {
              type: 'SENSOR',
              sensor: con
